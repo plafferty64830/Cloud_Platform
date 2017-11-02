@@ -14,8 +14,6 @@ namespace Thumbnails
         private BlobStorageService _blobStorageService = new BlobStorageService();
         private CloudQueueService _queueStorageService = new CloudQueueService();
 
-        CloudBlockBlob blob = new CloudBlockBlob(blobURI);
-        blob.FetchAttributes();
 
         private CloudBlobContainer getPhotoGalleryContainer()
         {
@@ -82,6 +80,20 @@ namespace Thumbnails
                 // role that a new photo blob exists, which will 
                 // cause it to create a thumbnail blob of that photo
                 // for easier display. 
+
+                blob.Metadata["Title"] = Path.GetFileNameWithoutExtension(upload.PostedFile.FileName);
+
+                try
+                {
+                    blob.SetMetadata();
+                    Console.WriteLine("Metadata set....");
+                }
+                catch ( Exception e1)
+                {
+                    Console.WriteLine("***Webjob setMetaData() exception: " + e1.Message);
+                }
+            
+
                 getThumbnailMakerQueue().AddMessage(new CloudQueueMessage(System.Text.Encoding.UTF8.GetBytes(name)));
 
                 System.Diagnostics.Trace.WriteLine(String.Format("*** WebRole: Enqueued '{0}'", path));
@@ -109,7 +121,17 @@ namespace Thumbnails
             catch (Exception)
             {
             }
+        }
+            
+
+            private String getTitle(Uri blobUri)
+            {
+            CloudBlockBlob blob = new CloudBlockBlob(blobUri);
+            blob.FetchAttributes();
+
+            return blob.Metadata["Title"];
+            }
 
         }
     }
-}
+
