@@ -3,7 +3,7 @@ using Microsoft.WindowsAzure.Storage.Queue;
 using System.Configuration;
 using System.Diagnostics;
 
-namespace Thumbnails
+namespace CloudPlatformMP3_2_
 {
     public class CloudQueueService
     {

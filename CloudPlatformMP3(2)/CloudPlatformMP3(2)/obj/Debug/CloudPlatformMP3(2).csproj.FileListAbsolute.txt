@@ -1,0 +1,10 @@
+C:\Users\Patrick Lafferty\Desktop\cloud_platform_development\CloudPlatformMP3(2)\CloudPlatformMP3(2)\bin\CloudPlatformMP3(2).dll.config
+C:\Users\Patrick Lafferty\Desktop\cloud_platform_development\CloudPlatformMP3(2)\CloudPlatformMP3(2)\bin\CloudPlatformMP3(2).dll
+C:\Users\Patrick Lafferty\Desktop\cloud_platform_development\CloudPlatformMP3(2)\CloudPlatformMP3(2)\bin\CloudPlatformMP3(2).pdb
+C:\Users\Patrick Lafferty\Desktop\cloud_platform_development\CloudPlatformMP3(2)\CloudPlatformMP3(2)\bin\Microsoft.WindowsAzure.Storage.dll
+C:\Users\Patrick Lafferty\Desktop\cloud_platform_development\CloudPlatformMP3(2)\CloudPlatformMP3(2)\bin\Microsoft.Data.Edm.dll
+C:\Users\Patrick Lafferty\Desktop\cloud_platform_development\CloudPlatformMP3(2)\CloudPlatformMP3(2)\bin\Microsoft.Data.Services.Client.dll
+C:\Users\Patrick Lafferty\Desktop\cloud_platform_development\CloudPlatformMP3(2)\CloudPlatformMP3(2)\bin\Microsoft.Data.OData.dll
+C:\Users\Patrick Lafferty\Desktop\cloud_platform_development\CloudPlatformMP3(2)\CloudPlatformMP3(2)\obj\Debug\CloudPlatformMP3(2).csprojResolveAssemblyReference.cache
+C:\Users\Patrick Lafferty\Desktop\cloud_platform_development\CloudPlatformMP3(2)\CloudPlatformMP3(2)\obj\Debug\CloudPlatformMP3(2).dll
+C:\Users\Patrick Lafferty\Desktop\cloud_platform_development\CloudPlatformMP3(2)\CloudPlatformMP3(2)\obj\Debug\CloudPlatformMP3(2).pdb
