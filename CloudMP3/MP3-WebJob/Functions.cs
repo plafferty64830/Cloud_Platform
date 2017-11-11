@@ -1,81 +1,33 @@
 ﻿using System;
-using System.IO;
 using Microsoft.Azure.WebJobs;
+using NAudio.Wave;
+using System.IO;
 using Microsoft.WindowsAzure.Storage.Blob;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 
 namespace Thumbnails_WebJob
 {
     public class Functions
     {
-        // This class contains the application-specific WebJob code consisting of event-driven
-        // methods executed when messages appear in queues with any supporting code.
 
-        // Trigger method  - run when new message detected in queue. "thumbnailmaker" is name of queue.
-        // "photogallery" is name of storage container; "images" and "thumbanils" are folder names. 
-        // "{queueTrigger}" is an inbuilt variable taking on value of contents of message automatically;
-        // the other variables are valued automatically.
-        public static void GenerateThumbnail(
-        [QueueTrigger("thumbnailmaker")] String blobInfo,
-        [Blob("photogallery/images/{queueTrigger}")] CloudBlockBlob inputBlob,
-        [Blob("photogallery/thumbnails/{queueTrigger}")] CloudBlockBlob outputBlob, TextWriter logger)
+        private static void createSample(Stream input, Stream output, int duration)
         {
-            //use log.WriteLine() rather than Console.WriteLine() for trace output
-            logger.WriteLine("GenerateThumbnail() started...");
-            logger.WriteLine("Input blob is: " + blobInfo);
-
-            // Open streams to blobs for reading and writing as appropriate.
-            // Pass references to application specific methods
-            using (Stream input = inputBlob.OpenRead())
-            using (Stream output = outputBlob.OpenWrite())
+            using (var reader = new Mp3FileReader(input, wave => new NLayer.NAudioSupport.Mp3FrameDecompressor(wave)))
             {
-                ConvertImageToThumbnailJPG(input, output);
-                outputBlob.Properties.ContentType = "image/jpeg";
-            }
-            logger.WriteLine("GenerateThumbnail() completed...");
-        }
+                Mp3Frame frame;
+                frame = reader.ReadNextFrame();
+                int frameTimeLength = (int)(frame.SampleCount / (double)frame.SampleRate * 1000.0);
+                int framesRequired = (int)(duration / (double)frameTimeLength * 1000.0);
 
-        // Create thumbnail - the detail is unimportant but notice formal parameter types.
-        public static void ConvertImageToThumbnailJPG(Stream input, Stream output)
-        {
-            int thumbnailsize = 128;
-            int width;
-            int height;
-            var originalImage = new Bitmap(input);
-
-            if (originalImage.Width > originalImage.Height)
-            {
-                width = thumbnailsize;
-                height = thumbnailsize * originalImage.Height / originalImage.Width;
-            }
-            else
-            {
-                height = thumbnailsize;
-                width = thumbnailsize * originalImage.Width / originalImage.Height;
-            }
-
-            Bitmap thumbnailImage = null;
-            try
-            {
-                thumbnailImage = new Bitmap(width, height);
-
-                using (Graphics graphics = Graphics.FromImage(thumbnailImage))
+                int frameNumber = 0;
+                while ((frame = reader.ReadNextFrame()) != null)
                 {
-                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                    graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                    graphics.DrawImage(originalImage, 0, 0, width, height);
-                }
+                    frameNumber++;
 
-                thumbnailImage.Save(output, ImageFormat.Jpeg);
-            }
-            finally
-            {
-                if (thumbnailImage != null)
-                {
-                    thumbnailImage.Dispose();
+                    if (frameNumber <= framesRequired)
+                    {
+                        output.Write(frame.RawData, 0, frame.RawData.Length);
+                    }
+                    else break;
                 }
             }
         }

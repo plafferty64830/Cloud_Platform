@@ -10,7 +10,7 @@
     <form id="form1" runat="server">
         <asp:ScriptManager ID="sm1" runat="server" />
         <div>
-            Upload image:
+            Upload Mp3 File for processing:
             <asp:FileUpload ID="upload" runat="server" />
             <asp:Button ID="submitButton" runat="server" Text="Submit" OnClick="submitButton_Click" />
         </div>
@@ -22,7 +22,8 @@
                             <asp:Image ID="itemPlaceholder" runat="server" />
                         </LayoutTemplate>
                         <ItemTemplate>
-                            <asp:Image ID="photoImage" runat="server" ImageUrl='<%# Eval("Url") %>' />
+                            <audio src='<%# Eval("Url") %>' controls="" preload="none"></audio> 
+                            <asp:Literal ID="label" Text='<%# Eval("Title") %>' runat="server"/> 
                         </ItemTemplate>
                     </asp:ListView>
                     <asp:Timer ID="timer1" runat="server" Interval="1000" />
